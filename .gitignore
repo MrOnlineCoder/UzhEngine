@@ -1,8 +1,9 @@
-3dGame.sdf 
+*.sdf 
+*.suo
+*.v11.suo
+*.opensdf
+*.vcxproj
+*.vcxproj.filters
+
 engine.log
-3dGame.vcxproj
-3dGame.vcxproj.filters
 Debug
-UzhEngine.suo
-UzhEngine.v11.suo
-3dGame.opensdf

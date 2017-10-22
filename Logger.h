@@ -37,6 +37,7 @@ namespace uzh {
 	public:
 		bool init();
 		void log(std::string tag, std::string msg);
+		void close();
 	private:
 		sf::Clock clock;
 		std::ofstream file;

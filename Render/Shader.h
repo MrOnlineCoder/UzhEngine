@@ -30,6 +30,10 @@
 
 #include <GL/gl3w.h>
 
+#include "../ThirdParty/glm/glm.hpp"
+#include "../ThirdParty/glm/gtc/matrix_transform.hpp"
+#include "../ThirdParty/glm/gtc/type_ptr.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -46,6 +50,16 @@ namespace uzh {
 			bool loadFragmentSource(std::string path);
 			bool link();
 			void bind();
+
+			void loadInteger(const std::string& loc, int n);
+			void loadFloat(const std::string& loc, float n);
+
+			void loadVector2(const std::string& loc, glm::vec2& vec);
+			void loadVector3(const std::string& loc, glm::vec3& vec);
+			void loadVector4(const std::string& loc, glm::vec4& vec);
+
+			void loadMatrix(const std::string& loc, glm::mat4& mat);
+
 		private:
 			GLuint program;
 			GLuint vertex;

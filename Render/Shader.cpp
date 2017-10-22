@@ -134,3 +134,27 @@ bool uzh::Shader::checkShader(GLuint id, bool isProgram) {
 
 	return true;
 }
+
+void uzh::Shader::loadVector2(const std::string& loc, glm::vec2& vec) {
+	glUniform2f(glGetUniformLocation(program, loc.c_str()), vec.x, vec.y);
+}
+
+void uzh::Shader::loadVector3(const std::string& loc, glm::vec3& vec) {
+	glUniform3f(glGetUniformLocation(program, loc.c_str()), vec.x, vec.y, vec.z);
+}
+
+void uzh::Shader::loadVector4(const std::string& loc, glm::vec4& vec) {
+	glUniform4f(glGetUniformLocation(program, loc.c_str()), vec.x, vec.y, vec.z, vec.w);
+}
+
+void uzh::Shader::loadMatrix(const std::string& loc, glm::mat4& mat) {
+	glUniformMatrix4fv(glGetUniformLocation(program, loc.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void uzh::Shader::loadInteger(const std::string& loc, int n) {
+	glUniform1i(glGetUniformLocation(program, loc.c_str()), n);
+}
+
+void uzh::Shader::loadFloat(const std::string& loc, float n) {
+	glUniform1f(glGetUniformLocation(program, loc.c_str()), n);
+}

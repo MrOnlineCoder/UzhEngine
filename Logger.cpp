@@ -42,3 +42,7 @@ bool uzh::Logger::init() {
 void uzh::Logger::log(std::string tag, std::string msg) {
 	file << "[" << tag << " at " << clock.getElapsedTime().asSeconds() << " s.] " << msg << "\n";
 }
+
+void uzh::Logger::close() {
+	file.close();
+}

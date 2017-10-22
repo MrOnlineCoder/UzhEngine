@@ -26,8 +26,6 @@
 */
 
 #include "Engine.h"
-#include "Logger.h"
-#include "Render/Shader.h"
 
 void uzh::Engine::_crash(std::string msg) {
 	MessageBox(NULL, msg.c_str(), "Engine Fatal Error :(", MB_OK | MB_SYSTEMMODAL | MB_ICONHAND);
@@ -51,6 +49,7 @@ int uzh::Engine::run() {
 	GLOG.log("Engine", "Creating RenderWindow...");
 	window.create(sf::VideoMode(1280, 720), "UzhEngine Application", sf::Style::Default, contextSettings);
 	window.setActive(true);
+	window.setFramerateLimit(60);
 
 	GLOG.log("Engine", "Loading GL functions through gl3wInit():");
 	int gl3wResult = 0;
@@ -65,7 +64,63 @@ int uzh::Engine::run() {
 	testShader.loadVertexSource("Content/Shaders/basic.vert");
 	testShader.loadFragmentSource("Content/Shaders/basic.frag");
 	testShader.link();
-	testShader.bind();
 
+	uzh::Texture tex;
+	tex.loadFromFile("Content/texture.jpg");
+
+	GLfloat verts[] = {
+         0.0f,  0.5f, 0.0f,  // top right
+         0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f,  // bottom left
+    };
+
+	GLfloat texCoords[] = {
+         0.0f,  0.0f, 
+         1.0f,  0.0f,
+         0.5f,  1.0f
+    };
+
+	std::vector<GLfloat> v(verts, verts + 9);
+	std::vector<GLfloat> tv(texCoords, texCoords + 6);
+
+	Model model;
+	model.addVBO(3, v);
+	model.addTexCoords(tv);
+
+	GLOG.log("Engine", "Entering window event loop..");
+	while (window.isOpen()) {
+		sf::Event ev;
+		while (window.pollEvent(ev)) {
+			switch (ev.type) {
+				case sf::Event::Closed:
+					GLOG.log("SFMLEventLoop", "sf::Event::Closed got! Closing window...");
+					window.close();
+					break;
+				case sf::Event::KeyReleased:
+					if (ev.key.code == sf::Keyboard::F2) {
+						wireframeMode = !wireframeMode;
+						GLOG.log("Debug", "Switching wireframe mode: "+std::to_string(wireframeMode));
+						glPolygonMode(GL_FRONT_AND_BACK, wireframeMode ? GL_LINE : GL_FILL);
+					}
+			}
+		}
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		testShader.bind();
+		glActiveTexture(GL_TEXTURE0);
+		tex.bind();
+
+		model.render();
+
+		window.display();
+	}
+
+	GLOG.log("Engine", "Cleaning up...");
+	GLOG.log("Engine", "- Total Shutdown -");
+	GLOG.close();
 	return 0;
+}
+
+uzh::Engine::Engine() {
+	wireframeMode = false;
 }

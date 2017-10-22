@@ -194,8 +194,10 @@
 
 // Visual C++
 #elif defined(_MSC_VER)
-#	if _MSC_VER < 1800
-#		error "GLM requires Visual C++ 12 - 2013 or higher"
+#	if _MSC_VER < 1600
+#		error "GLM requires Visual C++ 12 - 2013 or higher (EDIT VS12)"
+#   elif _MSC_VER == 1600
+#		define GLM_COMPILER GLM_COMPULER_VC
 #	elif _MSC_VER == 1800
 #		define GLM_COMPILER GLM_COMPILER_VC12
 #	elif _MSC_VER == 1900
@@ -229,6 +231,8 @@
 #else
 #	define GLM_COMPILER GLM_COMPILER_UNKNOWN
 #endif
+
+#define GLM_COMPILER 0
 
 #ifndef GLM_COMPILER
 #	error "GLM_COMPILER undefined, your compiler may not be supported by GLM. Add #define GLM_COMPILER 0 to ignore this message."

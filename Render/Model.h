@@ -25,40 +25,32 @@
 
 */
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef MODEL_H
+#define MODEL_H
+
+#include <GL/gl3w.h>
 
 #include <vector>
 
-#include <SFML/Graphics.hpp>
-#include <Windows.h>
-#include <GL/gl3w.h>
+#include "../Logger.h"
 
-#include "ThirdParty/glm/glm.hpp"
-#include "ThirdParty/glm/gtc/matrix_transform.hpp"
-#include "ThirdParty/glm/gtc/type_ptr.hpp"
+namespace uzh {
+	class Model {
+	public:
+		Model();
+		~Model();
+		void addVBO(int dim, std::vector<GLfloat>& data);
+		void addTexCoords(std::vector<GLfloat>& data);
+		void render();
+	private:
+		GLuint vao;
+		GLuint vbo;
+		GLuint tvbo;
+		GLuint ebo;
 
-#include "Logger.h"
-#include "Render/Shader.h"
-#include "Render/Model.h"
-#include "Render/Texture.h"
-
-
-
-
-namespace uzh { 
-  class Engine {
-  public:
-	  int run();
-	  Engine();
-  private:
-	  void _crash(std::string msg);
-
-	  sf::RenderWindow window;
-	  sf::ContextSettings contextSettings;
-
-	  bool wireframeMode;
-  };
+		int boundVBOs;
+		int size;
+	};
 }
 
 #endif

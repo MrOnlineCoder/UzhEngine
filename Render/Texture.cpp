@@ -25,40 +25,31 @@
 
 */
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#include "Texture.h"
 
-#include <vector>
-
-#include <SFML/Graphics.hpp>
-#include <Windows.h>
-#include <GL/gl3w.h>
-
-#include "ThirdParty/glm/glm.hpp"
-#include "ThirdParty/glm/gtc/matrix_transform.hpp"
-#include "ThirdParty/glm/gtc/type_ptr.hpp"
-
-#include "Logger.h"
-#include "Render/Shader.h"
-#include "Render/Model.h"
-#include "Render/Texture.h"
-
-
-
-
-namespace uzh { 
-  class Engine {
-  public:
-	  int run();
-	  Engine();
-  private:
-	  void _crash(std::string msg);
-
-	  sf::RenderWindow window;
-	  sf::ContextSettings contextSettings;
-
-	  bool wireframeMode;
-  };
+void uzh::Texture::bind() {
+	glBindTexture(GL_TEXTURE_2D, id);
 }
 
-#endif
+bool uzh::Texture::loadFromFile(std::string path) {
+	sf::Image img;
+	if (!img.loadFromFile(path)) {
+		GLOG.log("Texture", "Error: Failed to load texture: "+path);
+		return false;
+	}
+
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getSize().x, img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+
+
+	return true;
+}

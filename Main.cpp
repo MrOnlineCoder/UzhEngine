@@ -27,8 +27,8 @@
 #include "Engine.h"
 
 int main() {
-	uzh::Engine engine;
+	uzh::Engine __engine__;
 
 	//Let the fun begin!
-	return engine.run();
+	return __engine__.run();
 }

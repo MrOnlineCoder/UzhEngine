@@ -25,40 +25,25 @@
 
 */
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
-#include <vector>
+#include <string>
 
-#include <SFML/Graphics.hpp>
-#include <Windows.h>
 #include <GL/gl3w.h>
+#include <SFML/Graphics/Image.hpp>
 
-#include "ThirdParty/glm/glm.hpp"
-#include "ThirdParty/glm/gtc/matrix_transform.hpp"
-#include "ThirdParty/glm/gtc/type_ptr.hpp"
-
-#include "Logger.h"
-#include "Render/Shader.h"
-#include "Render/Model.h"
-#include "Render/Texture.h"
+#include "../Logger.h"
 
 
-
-
-namespace uzh { 
-  class Engine {
-  public:
-	  int run();
-	  Engine();
-  private:
-	  void _crash(std::string msg);
-
-	  sf::RenderWindow window;
-	  sf::ContextSettings contextSettings;
-
-	  bool wireframeMode;
-  };
+namespace uzh {
+	class Texture {
+	public:
+		void bind();
+		bool loadFromFile(std::string path);
+	private:
+		GLuint id;
+	};
 }
 
 #endif

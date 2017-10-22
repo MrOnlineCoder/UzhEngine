@@ -25,40 +25,52 @@
 
 */
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#include "Model.h"
 
-#include <vector>
-
-#include <SFML/Graphics.hpp>
-#include <Windows.h>
-#include <GL/gl3w.h>
-
-#include "ThirdParty/glm/glm.hpp"
-#include "ThirdParty/glm/gtc/matrix_transform.hpp"
-#include "ThirdParty/glm/gtc/type_ptr.hpp"
-
-#include "Logger.h"
-#include "Render/Shader.h"
-#include "Render/Model.h"
-#include "Render/Texture.h"
-
-
-
-
-namespace uzh { 
-  class Engine {
-  public:
-	  int run();
-	  Engine();
-  private:
-	  void _crash(std::string msg);
-
-	  sf::RenderWindow window;
-	  sf::ContextSettings contextSettings;
-
-	  bool wireframeMode;
-  };
+void uzh::Model::render() {
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-#endif
+void uzh::Model::addVBO(int dim, std::vector<GLfloat>& data) {
+	if (vbo != 0) {
+		glDeleteBuffers(1, &vbo);
+	}
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data.size(), data.data(), GL_STATIC_DRAW);
+
+	//Vertex positions attribute
+	glVertexAttribPointer(0, dim, GL_FLOAT, GL_FALSE, dim * sizeof(GLfloat), (GLvoid*) 0);
+	glEnableVertexAttribArray(0);
+}
+
+void uzh::Model::addTexCoords(std::vector<GLfloat>& data) {
+	if (tvbo != 0) {
+		glDeleteBuffers(1, &tvbo);
+	}
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &tvbo);
+	glBindBuffer(GL_ARRAY_BUFFER, tvbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * data.size(), data.data(), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*) 0);
+	glEnableVertexAttribArray(1);
+}
+
+uzh::Model::Model() {
+	vao = 0;
+	vbo = 0;
+
+	glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+}
+
+uzh::Model::~Model() {
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &tvbo);
+	glDeleteVertexArrays(1, &vao);
+}
